@@ -278,6 +278,25 @@ public class DefaultPlaidUserClient implements PlaidUserClient {
     }
 
     @Override
+    public InfoResponse addInfo(InfoOptions options) {
+
+        if (StringUtils.isEmpty(accessToken)) {
+            throw new PlaidClientsideException("No accessToken set");
+        }
+
+        Map<String, Object> requestParams = new HashMap<String, Object>();
+        requestParams.put("upgrade_to", "info");
+
+        requestParams.put("login",true);
+
+        if (options != null) {
+            requestParams.put("options", options);
+        }
+
+        return handlePost("/upgrade", requestParams, InfoResponse.class);
+    }
+
+    @Override
     public InfoResponse info() {
 
         if (StringUtils.isEmpty(accessToken)) {
